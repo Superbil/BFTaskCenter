@@ -1,0 +1,22 @@
+PODS:
+  - BFTaskCenter (0.1.0):
+    - Bolts (~> 1.5)
+  - Bolts (1.7.0):
+    - Bolts/AppLinks (= 1.7.0)
+    - Bolts/Tasks (= 1.7.0)
+  - Bolts/AppLinks (1.7.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.7.0)
+
+DEPENDENCIES:
+  - BFTaskCenter (from `../`)
+
+EXTERNAL SOURCES:
+  BFTaskCenter:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  BFTaskCenter: 474133c3297bd7a269d31a0893adec13d58e8373
+  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
+
+COCOAPODS: 0.39.0

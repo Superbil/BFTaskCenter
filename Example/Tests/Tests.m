@@ -8,8 +8,10 @@
 
 @import XCTest;
 
-@interface Tests : XCTestCase
+#import "BFTaskCenter.h"
 
+@interface Tests : XCTestCase
+@property (nonatomic, strong) BFTaskCenter *center;
 @end
 
 @implementation Tests
@@ -17,7 +19,8 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+
+    self.center = [BFTaskCenter defaultCenter];
 }
 
 - (void)tearDown
