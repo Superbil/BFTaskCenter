@@ -35,6 +35,9 @@
 }
 
 - (id)addTaskBlockToCallbacks:(BFContinuationBlock)taskBlock forKey:(NSString *)key {
+    if (key.length == 0) {
+        return nil;
+    }
     NSMutableArray *callbacksOfKey = self.callbacks[key];
     if (!callbacksOfKey) {
         callbacksOfKey = [[NSMutableArray alloc] init];
@@ -60,6 +63,9 @@
 }
 
 - (void)clearAllCallbacksForKey:(NSString *)key {
+    if (key.length == 0) {
+        return;
+    }
     if (self.callbacks[key]) {
         [self.callbacks[key] removeAllObjects];
     }
