@@ -113,13 +113,17 @@
     id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
         NSLog(@"first %@", task.result);
 
-        [task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+        [[task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
             NSLog(@"sec %@", task.result);
             XCTAssertTrue([task.result integerValue] == 42);
+            return [BFTask taskWithResult:@"yooo"];
+        }] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            XCTAssertTrue([task.result isEqualToString:@"yooo"]);
             [e fulfill];
             return nil;
         }];
-        return nil;
+        // Can't use this to contiune, 689 is lost...
+        return [BFTask taskWithResult:@689];
     } forKey:key];
 
     [self.center sendToCallbacksWithKey:key result:@42];
