@@ -9,7 +9,7 @@
 #import "BFTaskCenter.h"
 
 @interface BFTaskCenter ()
-@property (nonatomic, strong) NSMutableDictionary *callbacks;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray *> *callbacks;
 @end
 
 @implementation BFTaskCenter
