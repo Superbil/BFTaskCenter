@@ -25,13 +25,111 @@
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.center = nil;
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testDefaultCenter
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    XCTAssertNotNil(self.center, "This must have value");
+}
+
+- (void)testSetNotNilBlock
+{
+    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        return nil;
+    } forKey:@"A"];
+    XCTAssertNotNil(o, @"addTaskBlockToCallbacks return vale must have value.");
+    [self.center removeTaskBlock:o forKey:@"A"];
+}
+
+- (void)testSend {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Testing sendToCallbacksWithKey"];
+
+    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        [expectation fulfill];
+        return nil;
+    } forKey:@"B"];
+
+    [self.center sendToCallbacksWithKey:@"B" result:nil];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation Failed with error: %@", error);
+        }
+        [self.center removeTaskBlock:o forKey:@"B"];
+    }];
+}
+
+- (void)testSendTwo {
+    XCTestExpectation *e1 = [self expectationWithDescription:@"Testing sendToCallbacksWithKey2_1"];
+    XCTestExpectation *e2 = [self expectationWithDescription:@"Testing sendToCallbacksWithKey2_2"];
+
+    id o1 = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        [e1 fulfill];
+        return nil;
+    } forKey:@"C"];
+
+    id o2 = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        [e2 fulfill];
+        return nil;
+    } forKey:@"C"];
+
+    [self.center sendToCallbacksWithKey:@"C" result:nil];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation Failed with error: %@", error);
+        }
+        [self.center removeTaskBlock:o1 forKey:@"C"];
+        [self.center removeTaskBlock:o2 forKey:@"C"];
+    }];
+}
+
+- (void)testSendResult {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Testing testSendResult"];
+    NSString *key = NSStringFromSelector(_cmd);
+
+    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        XCTAssertEqualObjects(task.result, @"689");
+        [expectation fulfill];
+        return nil;
+    } forKey:key];
+
+    [self.center sendToCallbacksWithKey:key result:@"689"];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation Failed with error: %@", error);
+        }
+        [self.center removeTaskBlock:o forKey:key];
+    }];
+}
+
+- (void)testSendResultAndContinue {
+    XCTestExpectation *e = [self expectationWithDescription:@"Testing testSendResultAndContinue"];
+    NSString *key = NSStringFromSelector(_cmd);
+
+    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+        NSLog(@"first %@", task.result);
+
+        [task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            NSLog(@"sec %@", task.result);
+            XCTAssertTrue([task.result integerValue] == 42);
+            [e fulfill];
+            return nil;
+        }];
+        return nil;
+    } forKey:key];
+
+    [self.center sendToCallbacksWithKey:key result:@42];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        if (error) {
+            XCTFail(@"Expectation Failed with error: %@", error);
+        }
+        [self.center removeTaskBlock:o forKey:key];
+    }];
 }
 
 @end
