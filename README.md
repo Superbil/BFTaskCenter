@@ -28,4 +28,4 @@ Superbil
 
 ## License
 
-BFTaskCenter is available under the MIT license. See the LICENSE file for more info.
+BFTaskCenter is available under the [MIT license](http://superbil.mit-license.org/). See the LICENSE file for more info.
