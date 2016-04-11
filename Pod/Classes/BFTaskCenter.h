@@ -11,13 +11,17 @@
 
 @interface BFTaskCenter : NSObject
 
-+ (instancetype)defaultCenter;
++ (nonnull instancetype)defaultCenter;
 
-- (id)addTaskBlockToCallbacks:(BFContinuationBlock)taskBlock forKey:(NSString *)key;
-- (void)removeTaskBlock:(id)taskBlock forKey:(NSString *)key;
-- (void)clearAllCallbacksForKey:(NSString *)key;
+- (nullable id)addTaskBlockToCallbacks:(nonnull BFContinuationBlock)taskBlock forKey:(nonnull NSString *)key;
+- (void)removeTaskBlock:(nonnull id)taskBlock forKey:(nonnull NSString *)key;
+- (void)clearAllCallbacksForKey:(nonnull NSString *)key;
 
-- (void)sendToCallbacksWithKey:(NSString *)key result:(id)result;
-- (void)sendToCallbacksWithKey:(NSString *)key error:(NSError *)error;
+- (void)sendToCallbacksWithKey:(nonnull NSString *)key result:(nullable id)result;
+- (void)sendToCallbacksWithKey:(nonnull NSString *)key error:(nonnull NSError *)error;
+
+- (nonnull BFTaskCompletionSource *)sourceOfSendToCallbacksForKey:(nonnull NSString *)key
+                                                         executor:(nonnull BFExecutor *)executor
+                                                cancellationToken:(nullable BFCancellationToken *)cancellationToken;
 
 @end

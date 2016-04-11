@@ -65,7 +65,10 @@
     }
 }
 
-- (BFTaskCompletionSource *)taskCompletionSourceForKey:(NSString *)key executor:(BFExecutor *)executor cancellationToken:(BFCancellationToken *)cancellationToken {
+- (BFTaskCompletionSource *)sourceOfSendToCallbacksForKey:(NSString *)key executor:(BFExecutor *)executor cancellationToken:(BFCancellationToken *)cancellationToken {
+    if (key.length == 0) {
+        return nil;
+    }
     BFTaskCompletionSource *s = [BFTaskCompletionSource taskCompletionSource];
     for (BFContinuationBlock block in self.callbacks[key]) {
         [s.task continueWithExecutor:executor block:block cancellationToken:cancellationToken];
@@ -74,11 +77,17 @@
 }
 
 - (void)sendToCallbacksWithKey:(NSString *)key result:(id)result {
-    [[self taskCompletionSourceForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setResult:result];
+    if (key.length == 0) {
+        return;
+    }
+    [[self sourceOfSendToCallbacksForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setResult:result];
 }
 
 - (void)sendToCallbacksWithKey:(NSString *)key error:(NSError *)error {
-    [[self taskCompletionSourceForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setError:error];
+    if (key.length == 0) {
+        return;
+    }
+    [[self sourceOfSendToCallbacksForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setError:error];
 }
 
 @end
