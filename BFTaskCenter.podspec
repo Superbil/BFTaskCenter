@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.license          = 'MIT'
   s.author           = { "Superbil" => "superbil@gmail.com" }
-  s.source           = { :git => "https://github.com/Superbil/BFTaskCenter.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/Superbil/BFTaskCenter.git", :tag => "v#{s.version.to_s}" }
   s.social_media_url = 'https://twitter.com/Superbil'
 
   s.platform     = :ios, '7.0'
