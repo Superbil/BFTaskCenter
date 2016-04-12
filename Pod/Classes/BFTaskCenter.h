@@ -10,9 +10,14 @@
 
 @interface BFTaskCenter : NSObject
 
+/*!
+ A block that can act as a continuation for a task.
+ */
+typedef void (^BFTaskCenterBlock)(BFTask * _Nonnull task);
+
 + (nonnull instancetype)defaultCenter;
 
-- (nullable id)addTaskBlockToCallbacks:(nonnull BFContinuationBlock)taskBlock forKey:(nonnull NSString *)key;
+- (nullable id)addTaskBlockToCallbacks:(nonnull BFTaskCenterBlock)taskBlock forKey:(nonnull NSString *)key;
 - (void)removeTaskBlock:(nonnull id)taskBlock forKey:(nonnull NSString *)key;
 - (void)clearAllCallbacksForKey:(nonnull NSString *)key;
 

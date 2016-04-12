@@ -34,11 +34,11 @@
     [self.callbacks removeAllObjects];
 }
 
-- (id)addTaskBlockToCallbacks:(BFContinuationBlock)taskBlock forKey:(NSString *)key {
+- (id)addTaskBlockToCallbacks:(BFTaskCenterBlock)taskBlock forKey:(NSString *)key {
     if (key.length == 0) {
         return nil;
     }
-    NSMutableArray *callbacksOfKey = self.callbacks[key];
+    NSMutableArray<BFTaskCenterBlock> *callbacksOfKey = self.callbacks[key];
     if (!callbacksOfKey) {
         callbacksOfKey = [[NSMutableArray alloc] init];
         self.callbacks[key] = callbacksOfKey;
@@ -47,7 +47,7 @@
     if ([callbacksOfKey isKindOfClass:[NSMutableArray class]]) {
         [callbacksOfKey addObject:copyBlock];
     } else if ([callbacksOfKey isKindOfClass:[NSArray class]]) {
-        NSMutableArray *newCallbacks = [NSMutableArray arrayWithArray:callbacksOfKey];
+        NSMutableArray<BFTaskCenterBlock> *newCallbacks = [NSMutableArray arrayWithArray:callbacksOfKey];
         [newCallbacks addObject:copyBlock];
     }
     return copyBlock;
@@ -55,7 +55,7 @@
 
 - (void)removeTaskBlock:(id)taskBlock forKey:(NSString *)key {
     if (self.callbacks[key]) {
-        NSMutableArray *callbacksOfKey = self.callbacks[key];
+        NSMutableArray<BFTaskCenterBlock> *callbacksOfKey = self.callbacks[key];
         if ([callbacksOfKey containsObject:taskBlock]) {
             [callbacksOfKey removeObject:taskBlock];
         }
@@ -76,8 +76,11 @@
         return nil;
     }
     BFTaskCompletionSource *s = [BFTaskCompletionSource taskCompletionSource];
-    for (BFContinuationBlock block in self.callbacks[key]) {
-        [s.task continueWithExecutor:executor block:block cancellationToken:cancellationToken];
+    for (BFTaskCenterBlock block in self.callbacks[key]) {
+        [s.task continueWithExecutor:executor block:^id _Nullable(BFTask * _Nonnull task) {
+            block(task);
+            return nil;
+        } cancellationToken:cancellationToken];
     }
     return s;
 }
