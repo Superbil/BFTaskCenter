@@ -10,6 +10,7 @@
 
 @interface BFTaskCenter ()
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray *> *callbacks;
+@property (nonatomic, strong) BFExecutor *executor;
 @end
 
 @implementation BFTaskCenter
@@ -26,6 +27,15 @@
 - (instancetype)init {
     if (self = [super init]) {
         _callbacks = [[NSMutableDictionary alloc] init];
+        _executor = [BFExecutor defaultExecutor];
+    }
+    return self;
+}
+
+- (instancetype)initWithExecutor:(BFExecutor *)executor {
+    if (self = [super init]) {
+        _callbacks = [[NSMutableDictionary alloc] init];
+        _executor = executor;
     }
     return self;
 }
@@ -89,14 +99,14 @@
     if (key.length == 0) {
         return;
     }
-    [[self sourceOfSendToCallbacksForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setResult:result];
+    [[self sourceOfSendToCallbacksForKey:key executor:self.executor cancellationToken:nil] setResult:result];
 }
 
 - (void)sendToCallbacksWithKey:(NSString *)key error:(NSError *)error {
     if (key.length == 0) {
         return;
     }
-    [[self sourceOfSendToCallbacksForKey:key executor:[BFExecutor defaultExecutor] cancellationToken:nil] setError:error];
+    [[self sourceOfSendToCallbacksForKey:key executor:self.executor cancellationToken:nil] setError:error];
 }
 
 @end
