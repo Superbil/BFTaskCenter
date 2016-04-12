@@ -36,8 +36,7 @@
 
 - (void)testSetNotNilBlock
 {
-    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
-        return nil;
+    id o = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
     } forKey:@"A"];
     XCTAssertNotNil(o, @"addTaskBlockToCallbacks return vale must have value.");
     [self.center removeTaskBlock:o forKey:@"A"];
@@ -46,9 +45,8 @@
 - (void)testSend {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Testing sendToCallbacksWithKey"];
 
-    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+    id o = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
         [expectation fulfill];
-        return nil;
     } forKey:@"B"];
 
     [self.center sendToCallbacksWithKey:@"B" result:nil];
@@ -65,14 +63,12 @@
     XCTestExpectation *e1 = [self expectationWithDescription:@"Testing sendToCallbacksWithKey2_1"];
     XCTestExpectation *e2 = [self expectationWithDescription:@"Testing sendToCallbacksWithKey2_2"];
 
-    id o1 = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+    id o1 = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
         [e1 fulfill];
-        return nil;
     } forKey:@"C"];
 
-    id o2 = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+    id o2 = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
         [e2 fulfill];
-        return nil;
     } forKey:@"C"];
 
     [self.center sendToCallbacksWithKey:@"C" result:nil];
@@ -90,10 +86,9 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Testing testSendResult"];
     NSString *key = NSStringFromSelector(_cmd);
 
-    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+    id o = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
         XCTAssertEqualObjects(task.result, @"689");
         [expectation fulfill];
-        return nil;
     } forKey:key];
 
     [self.center sendToCallbacksWithKey:key result:@"689"];
@@ -110,7 +105,7 @@
     XCTestExpectation *e = [self expectationWithDescription:@"Testing testSendResultAndContinue"];
     NSString *key = NSStringFromSelector(_cmd);
 
-    id o = [self.center addTaskBlockToCallbacks:^id _Nullable(BFTask * _Nonnull task) {
+    id o = [self.center addTaskBlockToCallbacks:^void(BFTask * _Nonnull task) {
         NSLog(@"first %@", task.result);
 
         [[task continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
@@ -122,8 +117,6 @@
             [e fulfill];
             return nil;
         }];
-        // Can't use this to contiune, 689 is lost...
-        return [BFTask taskWithResult:@689];
     } forKey:key];
 
     [self.center sendToCallbacksWithKey:key result:@42];
