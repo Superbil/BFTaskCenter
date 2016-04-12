@@ -15,9 +15,9 @@
  */
 typedef void (^BFTaskCenterBlock)(BFTask * _Nonnull task);
 
-+ (nonnull instancetype)defaultCenter;
++ (nullable instancetype)defaultCenter;
 
-- (instancetype)initWithExecutor:(BFExecutor *)executor;
+- (nullable instancetype)initWithExecutor:(nonnull BFExecutor *)executor;
 
 - (nullable id)addTaskBlockToCallbacks:(nonnull BFTaskCenterBlock)taskBlock forKey:(nonnull NSString *)key;
 - (void)removeTaskBlock:(nonnull id)taskBlock forKey:(nonnull NSString *)key;
