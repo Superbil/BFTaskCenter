@@ -8,6 +8,8 @@
 
 #import "Bolts.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface BFTaskCenter : NSObject
 
 /*!
@@ -15,9 +17,9 @@
  */
 typedef void (^BFTaskCenterBlock)(BFTask * _Nonnull task);
 
-+ (nonnull instancetype)defaultCenter;
++ (instancetype)defaultCenter;
 
-- (instancetype)initWithExecutor:(BFExecutor *)executor;
+- (instancetype)initWithExecutor:(nonnull BFExecutor *)executor;
 
 - (nullable id)addTaskBlockToCallbacks:(nonnull BFTaskCenterBlock)taskBlock forKey:(nonnull NSString *)key;
 - (void)removeTaskBlock:(nonnull id)taskBlock forKey:(nonnull NSString *)key;
@@ -31,3 +33,5 @@ typedef void (^BFTaskCenterBlock)(BFTask * _Nonnull task);
                                                  cancellationToken:(nullable BFCancellationToken *)cancellationToken;
 
 @end
+
+NS_ASSUME_NONNULL_END
