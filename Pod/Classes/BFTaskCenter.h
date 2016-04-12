@@ -6,7 +6,6 @@
 //
 //
 
-#import <Foundation/Foundation.h>
 #import "Bolts.h"
 
 @interface BFTaskCenter : NSObject
@@ -20,8 +19,8 @@
 - (void)sendToCallbacksWithKey:(nonnull NSString *)key result:(nullable id)result;
 - (void)sendToCallbacksWithKey:(nonnull NSString *)key error:(nonnull NSError *)error;
 
-- (nonnull BFTaskCompletionSource *)sourceOfSendToCallbacksForKey:(nonnull NSString *)key
-                                                         executor:(nonnull BFExecutor *)executor
-                                                cancellationToken:(nullable BFCancellationToken *)cancellationToken;
+- (nullable BFTaskCompletionSource *)sourceOfSendToCallbacksForKey:(nonnull NSString *)key
+                                                          executor:(nonnull BFExecutor *)executor
+                                                 cancellationToken:(nullable BFCancellationToken *)cancellationToken;
 
 @end
