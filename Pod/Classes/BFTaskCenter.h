@@ -17,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef void (^BFTaskCenterBlock)(BFTask * _Nonnull task);
 
-+ (instancetype)defaultCenter;
++ (nullable instancetype)defaultCenter;
 
-- (instancetype)initWithExecutor:(nonnull BFExecutor *)executor;
+- (nullable instancetype)initWithExecutor:(nonnull BFExecutor *)executor;
 
 - (nullable id)addTaskBlockToCallbacks:(nonnull BFTaskCenterBlock)taskBlock forKey:(nonnull NSString *)key;
 - (void)removeTaskBlock:(nonnull id)taskBlock forKey:(nonnull NSString *)key;
