@@ -6,7 +6,7 @@
 //
 //
 
-#import "Bolts.h"
+#import <Bolts/Bolts.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
